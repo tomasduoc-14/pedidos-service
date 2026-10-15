@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+
+mensajeria:
+  topico:
+    nombre: pedidos-eventos
+  colas:
+    notificaciones:
+      nombre: notificaciones-queue
+      dlq: notificaciones-dlq
+      visibility-timeout-segundos: 30
+      retencion-segundos: 86400
+      dlq-retencion-segundos: 1209600
+      max-receive-count: 3
+      filtro-tipo-evento:
+        - PEDIDO_CREADO
+        - PEDIDO_ENVIADO
+    tickets:
+      nombre: tickets-queue
+      dlq: tickets-dlq
+      visibility-timeout-segundos: 60
+      retencion-segundos: 345600
+      dlq-retencion-segundos: 1209600
+      max-receive-count: 3
+      filtro-tipo-evento:
+        - PEDIDO_CREADO
+    auditoria:
+      nombre: auditoria-queue
+      dlq: auditoria-dlq
+      visibility-timeout-segundos: 30
+      retencion-segundos: 604800
+      dlq-retencion-segundos: 1209600
+      max-receive-count: 5
