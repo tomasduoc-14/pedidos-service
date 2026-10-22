@@ -1,4 +1,4 @@
-package cl.duoc.pedidos_service;
+package cl.duoc.pedidosservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,3 +11,4 @@ class PedidosServiceApplicationTests {
 	}
 
 }
+
