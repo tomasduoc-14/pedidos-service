@@ -1,0 +1,26 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: admin-service
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+
+# Toda la configuracion del administrador vive aqui (nada escrito a mano en el codigo).
+admin:
+  # Clave para proteger /api/admin/** y para llamar a los consumidores (vacia = sin proteccion, solo desarrollo)
+  api-key: ${ADMIN_API_KEY:}
+  # Instancias de pedidos-service cuyos consumidores se pausan/reanudan
+  consumidores:
+    urls:
+      - http://localhost:8080
+      - http://localhost:8082
+  # Valores por defecto al crear colas (justificados en el README)
+  cola-por-defecto:
+    visibility-timeout-segundos: 30
+    retencion-segundos: 345600
+    dlq-retencion-segundos: 1209600
+    max-receive-count: 3

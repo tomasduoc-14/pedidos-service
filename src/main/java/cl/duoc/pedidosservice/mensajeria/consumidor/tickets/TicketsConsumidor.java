@@ -8,6 +8,7 @@ import io.awspring.cloud.sqs.annotation.SqsListener;
 import io.awspring.cloud.sqs.listener.acknowledgement.Acknowledgement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,12 @@ public class TicketsConsumidor {
     private static final Logger log = LoggerFactory.getLogger(TicketsConsumidor.class);
 
     private final ProcesadorMensajes procesador;
+    private final boolean simularFallos;
 
-    public TicketsConsumidor(ProcesadorMensajes procesador) {
+    public TicketsConsumidor(ProcesadorMensajes procesador,
+                             @Value("${mensajeria.simular-fallos:true}") boolean simularFallos) {
         this.procesador = procesador;
+        this.simularFallos = simularFallos;
     }
 
     @SqsListener(queueNames = "${mensajeria.colas.tickets.nombre}",
@@ -32,11 +36,11 @@ public class TicketsConsumidor {
     }
 
     private void generarTicket(PedidoEvento evento) {
-        // Gancho de demostracion: permite provocar fallos desde la API de pedidos.
-        if ("FALLO_RECUPERABLE".equals(evento.producto())) {
+        // Gancho de demostracion: con MENSAJERIA_SIMULAR_FALLOS=false ya no falla (sirve para reprocesar la DLQ).
+        if (simularFallos && "FALLO_RECUPERABLE".equals(evento.producto())) {
             throw new ErrorRecuperableException("servicio de documentos no disponible (simulado)");
         }
-        if ("FALLO_NO_RECUPERABLE".equals(evento.producto())) {
+        if (simularFallos && "FALLO_NO_RECUPERABLE".equals(evento.producto())) {
             throw new ErrorNoRecuperableException("datos del pedido invalidos (simulado)");
         }
         log.info("TICKET TCK-{} generado para {} x{} ({})",
