@@ -45,7 +45,7 @@ public class ProcesadorMensajes {
                          Consumer<PedidoEvento> logica) {
         MensajeriaProperties.Cola cola = props.colas().get(claveCola);
         int intento = intentoDe(mensaje);
-        String sqsId = valorHeader(mensaje, "messageid");
+        String sqsId = mensaje.getHeaders().getId() == null ? "n/d" : mensaje.getHeaders().getId().toString();
 
         PedidoEvento evento;
         try {
@@ -112,3 +112,4 @@ public class ProcesadorMensajes {
         return null;
     }
 }
+

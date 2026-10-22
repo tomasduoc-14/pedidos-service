@@ -23,7 +23,7 @@ public class ConsumidorControlClient {
         this.props = props;
         SimpleClientHttpRequestFactory fabrica = new SimpleClientHttpRequestFactory();
         fabrica.setConnectTimeout(Duration.ofSeconds(2));
-        fabrica.setReadTimeout(Duration.ofSeconds(5));
+        fabrica.setReadTimeout(Duration.ofSeconds(30));
         this.rest = RestClient.builder().requestFactory(fabrica).build();
     }
 
@@ -65,3 +65,4 @@ public class ConsumidorControlClient {
         return props.apiKey() == null ? "" : props.apiKey();
     }
 }
+
